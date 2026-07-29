@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Compile manuscript
         uses: xu-cheng/latex-action@v3
@@ -40,7 +40,7 @@ jobs:
           fi
 
       - name: Upload PDF
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: paper
           path: paper/build/main.pdf
@@ -50,7 +50,7 @@ jobs:
         run: bash scripts/arxiv_package.sh arxiv_submission.tar.gz
 
       - name: Upload arXiv source
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: arxiv-submission
           path: arxiv_submission.tar.gz
