@@ -1,0 +1,111 @@
+% =====================================================================
+%  Centralized macros. ALWAYS edit notation here, never inline.
+% =====================================================================
+
+% --------- packages ---------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\allowdisplaybreaks[1]
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage[numbers,square,sort&compress]{natbib}
+\usepackage{aliascnt}
+\usepackage{cleveref}
+\usepackage{microtype}
+\usepackage{xspace}
+
+% --------- theorem environments ---------
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\theoremstyle{definition}
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+\newaliascnt{assumption}{theorem}
+\newtheorem{assumption}[assumption]{Assumption}
+\aliascntresetthe{assumption}
+\newaliascnt{example}{theorem}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+
+\theoremstyle{remark}
+\newaliascnt{remark}{theorem}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+
+% --------- spaces ---------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\HH}{\mathcal{H}}        % main Hilbert space
+\newcommand{\HN}{\mathcal{H}_N}      % truncated subspace
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\Y}{\mathcal{Y}}
+
+% --------- operators ---------
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\KL}{KL}
+\DeclareMathOperator{\TV}{TV}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+% --------- forward problem ---------
+\newcommand{\G}{\mathcal{G}}         % forward operator
+\newcommand{\noise}{\eta}
+\newcommand{\sigobs}{\sigma}         % observational noise level
+\newcommand{\udag}{{u^{\dagger}}}     % true parameter
+\newcommand{\Gamobs}{\Gamma}          % noise covariance
+\newcommand{\Phim}{\Phi}              % misfit (potential)
+
+% --------- prior / learned drift ---------
+% Wrap macros that contain super/subscripts in braces so users can attach
+% further super/subscripts without triggering "Double subscript" errors.
+\newcommand{\muz}{{\mu_{0}}}                % prior
+\newcommand{\muy}{{\mu^{y}}}                % posterior given data y
+\newcommand{\muyN}{{\mu^{y}_{N}}}           % discretized posterior
+\newcommand{\drift}{{b_{\theta}}}            % Cameron--Martin drift
+\newcommand{\driftN}{{b_{\theta,N}}}         % projected drift
+\newcommand{\score}{{s_{\theta}}}            % score estimator (computational only)
+\newcommand{\dH}{{d_{\mathrm{H}}}}    % Hellinger distance
+\newcommand{\dTV}{{d_{\mathrm{TV}}}}  % total variation
+\newcommand{\dW}{{W_{2}}}              % Wasserstein-2
+
+% --------- norms and inner products ---------
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\inner}[2]{\langle #1,\,#2\rangle}
+
+% --------- shorthand for common phrases ---------
+\newcommand{\eg}{e.g.,\xspace}
+\newcommand{\ie}{i.e.,\xspace}
+\newcommand{\cf}{cf.\xspace}
+
+% --------- cleveref names ---------
+\crefname{theorem}{Theorem}{Theorems}
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{Corollary}{Corollaries}
+\crefname{assumption}{Assumption}{Assumptions}
+\crefname{definition}{Definition}{Definitions}
+\crefname{remark}{Remark}{Remarks}
+\crefname{equation}{Eq.}{Eqs.}
+\crefname{section}{Section}{Sections}
+\crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}

@@ -1,0 +1,33 @@
+# Sparse linear forward (random Gaussian matrix or Fourier subsample)
+# for contraction sweeps. Mirrors timings of configs/1d_deconv.yaml where
+# applicable; forward details are measurement-specific.
+
+experiment:
+  name: "sparse_linear_contraction"
+  out_dir: "results/sparse_linear"
+  seed: 42
+
+problem:
+  dim: 32
+  measurement: "gaussian-sparse" # or {gaussian-sparse, fourier-subsample}
+  matrix_seed: 12345
+
+prior:
+  hidden: 128
+  depth: 3
+  lipschitz: false
+
+train:
+  steps: 4000
+  batch_size: 128
+  lr: 2.0e-4
+
+posterior:
+  n_steps: 800
+  step_size: 1.0e-3
+
+sweep:
+  sigma_obs_values:
+    [0.25, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125, 0.00390625]
+  n_replicates_per_sigma: 16
+  n_truths: 6

@@ -1,0 +1,57 @@
+name: Build paper PDF
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "paper/**"
+      - "scripts/arxiv_package.sh"
+      - ".github/workflows/latex.yml"
+  pull_request:
+    paths:
+      - "paper/**"
+      - "scripts/arxiv_package.sh"
+      - ".github/workflows/latex.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile manuscript
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: paper
+          root_file: main.tex
+          latexmk_use_lualatex: false
+          args: >-
+            -pdf -file-line-error -halt-on-error
+            -interaction=nonstopmode
+
+      - name: Reject unresolved references and layout overflow
+        working-directory: paper
+        run: |
+          LOG=build/main.log
+          test -f "$LOG"
+          if grep -E 'There were undefined references|There were undefined citations|Overfull \\\\hbox|Overfull \\\\vbox' "$LOG"; then
+            exit 1
+          fi
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper
+          path: paper/build/main.pdf
+          if-no-files-found: error
+
+      - name: Package arXiv submission
+        run: bash scripts/arxiv_package.sh arxiv_submission.tar.gz
+
+      - name: Upload arXiv source
+        uses: actions/upload-artifact@v4
+        with:
+          name: arxiv-submission
+          path: arxiv_submission.tar.gz
+          if-no-files-found: error

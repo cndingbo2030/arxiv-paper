@@ -1,0 +1,39 @@
+# =========================================================================
+# Exploratory 1D deconvolution posterior-radius sweep.
+# =========================================================================
+
+experiment:
+  name: "1d_deconv_contraction"
+  out_dir: "results/1d_deconv"
+  seed: 20260512
+
+problem:
+  dim: 64
+  kernel_sigma: 0.05            # Gaussian blur bandwidth
+  n_obs: 64
+
+prior:
+  arch: "ScoreMLP1D"
+  hidden: 256
+  depth: 4
+  lipschitz: true
+  ema_decay: 0.999
+
+train:
+  optimizer: "adam"
+  lr: 2e-4
+  batch_size: 128
+  steps: 50000
+  precision: "bf16-mixed"
+  log_every: 100
+  ckpt_every: 5000
+
+posterior:
+  sampler: "PreconditionedLangevin"
+  step_size: 1.0e-3
+  n_steps: 5000
+  burn_in: 1000
+
+sweep:
+  sigma_obs_values: [0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125, 0.00390625]
+  n_replicates_per_sigma: 32

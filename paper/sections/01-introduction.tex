@@ -1,0 +1,95 @@
+\section{Introduction}
+\label{sec:intro}
+
+Bayesian inverse problems are most naturally formulated on function
+spaces.  A prior is placed on an unknown $u$ in a separable Hilbert
+space $\HH$, data are generated through a forward map, and Bayes'
+formula defines a posterior measure rather than a finite-dimensional
+density.  This viewpoint makes stability under perturbations and
+discretization part of the mathematical problem, not merely part of an
+implementation \citep{stuart2010,dashti2017}.
+
+Learned generative models enlarge the class of priors used in inverse
+problems.  Score-based constructions are particularly attractive
+because they combine a Gaussian reference process with a learned
+vector field.  In function spaces, however, a learned vector field is
+not automatically an admissible stochastic drift, and a drift used in
+a generative SDE is not automatically the score of the SDE's own
+marginal law.  Reverse-time score equations have a specific sign,
+time orientation, and conditional-expectation structure
+\citep{pidstrigach2023}.  Confusing these objects can invalidate an
+otherwise plausible posterior argument.
+
+This paper studies a narrower object that can be defined without that
+identification.  Starting from the stationary Gaussian
+Ornstein--Uhlenbeck process with covariance $\mathcal C$, we add a
+measurable drift $\drift(t,u)$ taking values in the Cameron--Martin
+space of $\mathcal N(0,\mathcal C)$.  The terminal law is the prior.
+The parameterization may be learned using score-matching data, but the
+mathematical assumptions concern the resulting drift itself.  A
+finite-horizon Girsanov condition then relates the prior to the
+reference Gaussian.
+
+The first result is posterior well-posedness.  For bounded linear
+observations and fixed positive noise level, existence and local
+Hellinger stability require only a finite second moment of the prior.
+Girsanov is therefore not part of Bayes' formula; it is a separate
+device for proving properties of this particular prior construction.
+This separation keeps the statistical statement valid even when a
+different method is used to construct the prior.
+
+The second result concerns spectral approximation.  If a
+finite-dimensional approximation is embedded in $\HH$ by setting all
+unresolved coordinates to zero, its law is singular with respect to a
+nondegenerate Gaussian measure on $\HH$.  Consequently, its Hellinger
+distance from the full prior is maximal, regardless of how small the
+discarded covariance eigenvalues are.  We instead use a
+\emph{full-space lift}: the learned drift and the likelihood are
+projected onto the first $N$ modes, while the unresolved modes retain
+their reference Gaussian law.  This produces a genuine
+infinite-dimensional probability measure and yields the bound
+\[
+  \dH(\muyN,\muy)
+  \leq C_R\!\left(\sqrt{\varepsilon_N}
+                  +\Bigl(\sum_{j>N}\lambda_j\Bigr)^{1/2}\right).
+\]
+The first term is a Cameron--Martin energy error between path drifts;
+the second is the root trace of the unresolved covariance.  For
+$\lambda_j\asymp j^{-2s}$ with $s>1/2$, the latter is of order
+$N^{1/2-s}$, not $\sqrt{\lambda_{N+1}}$.
+
+Posterior contraction needs more information than posterior
+well-posedness.  It depends on the observation experiment, the
+regularity of the truth, prior mass near that truth, tests, and an
+identifiable loss.  Even in the conjugate Gaussian sequence model, the
+rate depends on the prior regularity, truth regularity, degree of
+ill-posedness, and prior scaling \citep{knapik2011}.  We therefore give
+a conditional transfer criterion rather than assigning a universal
+rate to the learned prior.  A local lower bound on the Girsanov density
+transfers reference-Gaussian mass to the learned prior, but a global
+$L^2$ density bound alone does not provide that local information.
+
+For every fixed noise level, the posterior is locally Hellinger
+Lipschitz in the observations.  The lifted approximation converges when
+both the drift energy and covariance tail vanish.  Statistical
+contraction then requires separate local-mass, sieve, and testing
+arguments for the observation model.  The identifiable parameter is
+the equivalence class induced by the forward map; stronger recovery
+requires injectivity or a quantitative inverse stability estimate on
+the relevant parameter class.
+
+These statements complement work devoted to constructing or analysing
+diffusion-based samplers in function spaces
+\citep{baldassari2025langevin,baker2026,cheng2026}.  They do not provide
+a sampler convergence theorem, a nonlinear-forward-map theorem, or an
+unconditional contraction rate.  Those questions require assumptions
+not supplied by the present model.
+
+\paragraph{Organization.}
+\Cref{sec:setup} defines the prior, likelihood, and Hellinger metric.
+\Cref{sec:wellposed} proves posterior stability and states the lifted
+discretization theorem.  \Cref{sec:contraction} isolates the additional
+conditions needed for contraction and identifiability.
+\Cref{sec:experiments} records the limited role of the accompanying
+code, and \Cref{sec:discussion} summarizes the remaining mathematical
+gaps.  Detailed proofs are in the appendices.

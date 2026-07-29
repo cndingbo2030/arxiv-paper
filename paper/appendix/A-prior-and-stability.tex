@@ -1,0 +1,159 @@
+\section{Proofs for the prior and posterior stability}
+\label{sec:appendix-prior}
+
+\begin{lemma}[Existence and moments of the drifted OU process]
+\label{lem:sde-moments}
+Under \Cref{ass:drift}, \eqref{eq:prior-sde} and
+\eqref{eq:lifted-prior-sde} have unique continuous mild solutions.
+Moreover,
+\begin{equation}
+  \mathbb E\sup_{0\leq t\leq T}\norm{U_t}_{\HH}^p<\infty,
+  \qquad
+  \sup_{N\geq1}
+  \mathbb E\sup_{0\leq t\leq T}\norm{U_t^N}_{\HH}^p<\infty
+  \label{eq:uniform-moments}
+\end{equation}
+for $p=2$ and $p=4$.
+\end{lemma}
+
+\begin{proof}
+The embedding $H_{\mathcal C}\hookrightarrow\HH$ is continuous:
+\[
+  \norm{h}_{\HH}
+  =\norm{\mathcal C^{1/2}\mathcal C^{-1/2}h}_{\HH}
+  \leq\norm{\mathcal C^{1/2}}_{\mathrm{op}}
+       \norm{h}_{H_{\mathcal C}}.
+\]
+Hence $u\mapsto-\tfrac12u+\drift(t,u)$ is globally Lipschitz on
+$\HH$ with affine growth, uniformly in $t$.  The same is true of
+$\driftN$ because $P_N$ is a contraction both on $\HH$ and on
+$H_{\mathcal C}$.  Finally,
+$\mathcal C^{1/2}$ is Hilbert--Schmidt because
+$\operatorname{Tr}\mathcal C<\infty$.  The standard existence,
+uniqueness, Burkholder--Davis--Gundy, and Gronwall estimates for
+Hilbert-space stochastic evolution equations therefore apply
+\citep{daprato1992}.  Their constants depend on $p,T,L,M$, and
+$\mathcal C$, but not on $N$, which gives
+\eqref{eq:uniform-moments}.
+\end{proof}
+
+\begin{lemma}[Terminal Girsanov density]
+\label{lem:girsanov-terminal}
+Under \Cref{ass:drift,ass:girsanov}, the prior is equivalent to
+$\mu_{\mathrm{ref}}$, satisfies \eqref{eq:terminal-density}, and
+\begin{equation}
+  \int_{\HH}\rho(x)^2\,\mu_{\mathrm{ref}}(\mathrm dx)
+  \leq\mathbb E_{\mathbb Q}\mathcal E_T^2.
+  \label{eq:terminal-density-l2}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Define $\mathbb Q^\theta$ by
+$\mathrm d\mathbb Q^\theta=\mathcal E_T\,\mathrm d\mathbb Q$.
+The stochastic exponential is strictly positive
+$\mathbb Q$-almost surely, so $\mathbb Q^\theta$ and $\mathbb Q$ are
+equivalent.
+Girsanov's theorem gives the $\mathbb Q^\theta$-Brownian motion
+\[
+  W_t^\theta
+  =W_t-\int_0^t a(s,X_s)\,\mathrm ds .
+\]
+Substitution into \eqref{eq:reference-ou} yields
+\[
+  \mathrm dX_t
+  =\bigl[-\tfrac12X_t+\drift(t,X_t)\bigr]\,\mathrm dt
+   +\mathcal C^{1/2}\,\mathrm dW_t^\theta.
+\]
+By uniqueness in law from \Cref{lem:sde-moments},
+$\mathcal L_{\mathbb Q^\theta}(X_T)=\muz$.  For every bounded
+measurable $f$,
+\begin{align*}
+  \int f\,\mathrm d\muz
+  &=\mathbb E_{\mathbb Q}[\mathcal E_T f(X_T)]\\
+  &=\mathbb E_{\mathbb Q}
+       [\,\mathbb E_{\mathbb Q}(\mathcal E_T\mid X_T)f(X_T)\,]\\
+  &=\int f(x)\rho(x)\,\mu_{\mathrm{ref}}(\mathrm dx).
+\end{align*}
+Equivalence of the path measures also gives equivalence of their
+terminal laws.  This proves \eqref{eq:terminal-density}.  Conditional
+Jensen gives
+\[
+  \int\rho^2\,\mathrm d\mu_{\mathrm{ref}}
+  =\mathbb E_{\mathbb Q}
+     [\,\mathbb E_{\mathbb Q}(\mathcal E_T\mid X_T)^2\,]
+  \leq\mathbb E_{\mathbb Q}\mathcal E_T^2.
+\]
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:wellposed}]
+The likelihood $\exp\{-\Phim_{\sigobs}(u;y)\}$ is measurable, strictly
+positive, and bounded by one.  Its integral is therefore in $(0,1]$,
+which proves existence of the posterior.
+
+We next obtain estimates uniform on $\{y:\norm y\leq R\}$.  Since
+$\muz$ is a probability measure, there is an $r<\infty$ such that
+$m_r:=\muz(\{u:\norm u\leq r\})>0$.  For $\norm y\leq R$ and
+$\norm u\leq r$,
+\[
+  \Phim_{\sigobs}(u;y)
+  \leq
+  \frac{\norm{\Gamobs^{-1/2}}_{\mathrm{op}}^2}
+       {2\sigobs^2}
+  (R+\norm{\G}_{\mathrm{op}}r)^2
+  =:K_R .
+\]
+Consequently,
+\begin{equation}
+  Z(y)\geq z_R:=m_r e^{-K_R}>0 .
+  \label{eq:normalizer-lower}
+\end{equation}
+
+Let $A=\Gamobs^{-1/2}$.  The difference of two quadratic potentials
+satisfies
+\begin{align}
+  \abs{\Phim_{\sigobs}(u;y)-\Phim_{\sigobs}(u;y')}
+  &=
+  \frac{1}{2\sigobs^2}
+  \abs{
+    \inner{A(y-y')}{A(y+y'-2\G u)}_{\R^k}
+  }\notag\\
+  &\leq
+  c_R\norm{y-y'}_{\R^k}(1+\norm u_{\HH})
+  \label{eq:potential-data-difference}
+\end{align}
+for $\norm y,\norm{y'}\leq R$, where $c_R<\infty$ depends only on
+the displayed model quantities.  By
+\eqref{eq:prior-second-moment}, the right-hand side belongs to
+$L^2(\muz)$.
+
+Write $\ell_y(u)=e^{-\Phim_{\sigobs}(u;y)}$.  For $x,x'\geq0$,
+\[
+  \abs{e^{-x}-e^{-x'}}\leq\abs{x-x'},\qquad
+  \abs{e^{-x/2}-e^{-x'/2}}\leq\tfrac12\abs{x-x'}.
+\]
+It follows from \eqref{eq:potential-data-difference} and
+Cauchy--Schwarz that
+\begin{align}
+  \abs{Z(y)-Z(y')}
+    &\leq C_R\norm{y-y'}, \label{eq:normalizer-data-difference}\\
+  \norm{\sqrt{\ell_y}-\sqrt{\ell_{y'}}}_{L^2(\muz)}
+    &\leq C_R\norm{y-y'}. \label{eq:likelihood-data-difference}
+\end{align}
+On $[z_R,1]$, the map $z\mapsto z^{-1/2}$ is Lipschitz.  Therefore,
+using \eqref{eq:normalizer-lower}--\eqref{eq:likelihood-data-difference},
+\begin{align*}
+  \sqrt{2}\,\dH(\mu^y,\mu^{y'})
+  &=
+  \norm{
+    Z(y)^{-1/2}\sqrt{\ell_y}
+    -Z(y')^{-1/2}\sqrt{\ell_{y'}}
+  }_{L^2(\muz)}\\
+  &\leq
+  z_R^{-1/2}
+  \norm{\sqrt{\ell_y}-\sqrt{\ell_{y'}}}_{L^2(\muz)}
+  +\abs{Z(y)^{-1/2}-Z(y')^{-1/2}}\\
+  &\leq C_R\norm{y-y'}.
+\end{align*}
+This proves \eqref{eq:data-stability}.
+\end{proof}

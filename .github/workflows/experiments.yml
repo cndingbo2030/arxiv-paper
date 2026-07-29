@@ -1,0 +1,70 @@
+name: Experiments CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "experiments/**"
+      - "pilot_data/**"
+      - ".github/workflows/experiments.yml"
+  pull_request:
+    paths:
+      - "experiments/**"
+      - "pilot_data/**"
+      - ".github/workflows/experiments.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+        suite: [full, sparse_forward]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package (CPU torch)
+        working-directory: experiments
+        run: |
+          python -m pip install --upgrade pip
+          pip install --index-url https://download.pytorch.org/whl/cpu torch
+          pip install -e .[dev]
+
+      - name: Ruff
+        working-directory: experiments
+        run: ruff check src tests scripts sweep_sparse.py
+
+      - name: Pytest
+        working-directory: experiments
+        run: |
+          if [ "${{ matrix.suite }}" = "sparse_forward" ]; then
+            pytest -q tests/test_sparse_smoke.py
+          else
+            pytest -q --ignore=tests/test_sparse_smoke.py
+          fi
+
+      - name: Smoke training run
+        if: ${{ matrix.suite == 'full' }}
+        working-directory: experiments
+        run: |
+          python scripts/smoke_train.py --steps 800 --batch 32 --dim 32 --hidden 64 --depth 2
+
+      - name: Gaussian discretization diagnostic (fast)
+        if: ${{ matrix.suite == 'full' }}
+        working-directory: experiments
+        run: |
+          PYTHONPATH=src python -m score_bip.theory.gaussian_discretization_diagnostic --fast --out /tmp/gaussian_diagnostic_ci.npz
+
+      - name: Posterior-radius pilot (fast)
+        if: ${{ matrix.suite == 'full' }}
+        working-directory: experiments
+        run: |
+          PYTHONPATH=src python -m score_bip.theory.contraction_pilot --fast --out /tmp/contraction_pilot_ci.npz

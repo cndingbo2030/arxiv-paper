@@ -1,0 +1,169 @@
+\section{Posterior stability and lifted discretization}
+\label{sec:wellposed}
+
+\subsection{Existence and stability in the data}
+
+The first theorem is a property of Bayes' formula and does not require
+the Girsanov representation.
+
+\begin{theorem}[Posterior well-posedness]
+\label{thm:wellposed}
+Let $\G:\HH\to\R^k$ be bounded and linear, let $\Gamobs$ be positive
+definite, and fix $\sigobs>0$.  If
+\begin{equation}
+  \int_{\HH}\norm{u}_{\HH}^2\,\muz(\mathrm du)<\infty ,
+  \label{eq:prior-second-moment}
+\end{equation}
+then $0<Z(y)\leq1$ for every $y\in\R^k$, so
+\eqref{eq:posterior} defines a probability measure.  Moreover, for
+every $R<\infty$ there is a finite constant $C_R$ such that
+\begin{equation}
+  \dH(\mu^y,\mu^{y'})
+  \leq C_R\norm{y-y'}_{\R^k},
+  \qquad \norm{y},\norm{y'}\leq R .
+  \label{eq:data-stability}
+\end{equation}
+The constant may depend on
+$R,\sigobs,\G,\Gamobs$, and $\muz$.
+\end{theorem}
+
+\Cref{ass:drift} implies \eqref{eq:prior-second-moment} by
+\Cref{lem:sde-moments}.  The role of \Cref{ass:girsanov} is different:
+it gives the density \eqref{eq:terminal-density}, which is useful when
+transferring local mass estimates from the Gaussian reference prior.
+Neither Gaussianity nor absolute continuity is needed for
+\Cref{thm:wellposed}.
+
+\subsection{A full-space spectral lift}
+
+Define
+\begin{equation}
+  \driftN(t,u)=P_N\drift(t,P_Nu),\qquad
+  a_N(t,u)=\mathcal C^{-1/2}\driftN(t,u).
+  \label{eq:projected-drift}
+\end{equation}
+Because $P_N$ commutes with $\mathcal C$, the projected drift remains
+Cameron--Martin-valued and satisfies
+\Cref{ass:drift} with constants independent of $N$.  Let $U^N$ solve
+\begin{equation}
+  \mathrm dU_t^N
+  =\bigl[-\tfrac12U_t^N+\driftN(t,U_t^N)\bigr]\,\mathrm dt
+   +\mathcal C^{1/2}\,\mathrm dW_t,\qquad
+  U_0^N\sim\mu_{\mathrm{ref}},
+  \label{eq:lifted-prior-sde}
+\end{equation}
+and let $\mu_{0,N}=\mathcal L(U_T^N)$.  Notice that the noise in
+\eqref{eq:lifted-prior-sde} is not projected.  The high-frequency
+component $(I-P_N)U_T^N$ therefore retains its reference Gaussian law.
+
+The likelihood is approximated by
+\begin{equation}
+  \Phim_{\sigobs,N}(u;y)
+  =\Phim_{\sigobs}(P_Nu;y),
+  \label{eq:projected-potential}
+\end{equation}
+and the lifted posterior is
+\begin{equation}
+  \frac{\mathrm d\muyN}{\mathrm d\mu_{0,N}}(u)
+  =\frac{\exp\{-\Phim_{\sigobs,N}(u;y)\}}{Z_N(y)} .
+  \label{eq:lifted-posterior}
+\end{equation}
+Both $\muyN$ and $\muy$ are probability measures on the same space
+$\HH$.
+
+Let $\mathbb Q^\theta$ and $\mathbb Q_N^\theta$ denote the path
+measures obtained from the reference OU law by the stochastic
+exponentials associated with $a$ and $a_N$, respectively.
+
+\begin{assumption}[Drift approximation]
+\label{ass:drift-approximation}
+For every $N$, the two stochastic exponentials are true martingales,
+$\mathbb Q^\theta\ll\mathbb Q_N^\theta$, and the Girsanov entropy
+identity holds:
+\begin{equation}
+  \KL(\mathbb Q^\theta\,\|\,\mathbb Q_N^\theta)
+  =\frac12\,
+    \mathbb E_{\mathbb Q^\theta}
+      \int_0^T\norm{a(t,X_t)-a_N(t,X_t)}_{\HH}^2\,\mathrm dt
+  =\frac12\varepsilon_N<\infty .
+  \label{eq:drift-energy}
+\end{equation}
+\end{assumption}
+
+This condition is a statement about the actual path measures.  It is
+not inferred from a training loss unless a separate argument connects
+that loss to the expectation in \eqref{eq:drift-energy}.
+
+\begin{theorem}[Lifted discretization bound]
+\label{thm:discrete}
+Suppose \Cref{ass:drift,ass:girsanov,ass:drift-approximation} hold.
+Let $\G$ be bounded and linear, let $\Gamobs$ be positive definite, and
+fix $\sigobs>0$.  Then, for every $R<\infty$, there is a constant
+$C_R<\infty$, independent of $N$, such that
+\begin{equation}
+  \sup_{\norm{y}\leq R}
+  \dH(\muyN,\muy)
+  \leq C_R\left(\sqrt{\varepsilon_N}+r_N\right),
+  \qquad
+  r_N^2=\sum_{j>N}\lambda_j .
+  \label{eq:discretization-bound}
+\end{equation}
+Consequently, $\dH(\muyN,\muy)\to0$ uniformly on bounded data sets
+whenever $\varepsilon_N\to0$.
+\end{theorem}
+
+The two terms have distinct origins.  Data processing for relative
+entropy controls the terminal prior error by the pathwise drift energy.
+The likelihood error is controlled by the unresolved Gaussian
+component, whose mean-square norm is exactly $r_N^2$.  The proof is in
+\Cref{sec:appendix-discretization}.
+
+\begin{corollary}[Polynomial and geometric covariance tails]
+\label{cor:tail-rates}
+Under the assumptions of \Cref{thm:discrete}, suppose
+$\varepsilon_N=O(N^{-2q})$ for some $q>0$.
+\begin{enumerate}
+  \item If $\lambda_j\leq c j^{-2s}$ for some $s>1/2$, then
+  \[
+    \dH(\muyN,\muy)
+    =O\!\left(N^{-\min\{q,s-1/2\}}\right)
+  \]
+  uniformly for $\norm{y}\leq R$.
+  \item If $\lambda_j\leq c e^{-\alpha j}$ for some $\alpha>0$, then
+  \[
+    \dH(\muyN,\muy)
+    =O\!\left(N^{-q}+e^{-\alpha N/2}\right)
+  \]
+  uniformly for $\norm{y}\leq R$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+For polynomial decay, the integral test gives
+$\sum_{j>N}\lambda_j=O(N^{1-2s})$.  For geometric decay, summing the
+geometric series gives
+$\sum_{j>N}\lambda_j=O(e^{-\alpha N})$.  Substitute these estimates
+and $\sqrt{\varepsilon_N}=O(N^{-q})$ into
+\eqref{eq:discretization-bound}.
+\end{proof}
+
+\begin{proposition}[Why the lift is necessary]
+\label{prop:singular-collapse}
+Suppose $\nu_N$ is supported on $\HN$ and $\muy\ll\muz\ll
+\mu_{\mathrm{ref}}$.  Then $\nu_N\perp\muy$ and
+\begin{equation}
+  \dH(\nu_N,\muy)=1 .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Every proper finite-dimensional subspace of $\HH$ has
+$\mu_{\mathrm{ref}}$-measure zero.  Hence
+$\muy(\HN)=0$, whereas $\nu_N(\HN)=1$.  The measures are mutually
+singular, and \eqref{eq:hellinger} gives Hellinger distance one.
+\end{proof}
+
+Thus \Cref{thm:discrete} does not assert Hellinger convergence of a
+collapsed finite-dimensional posterior.  Such approximations may
+converge after projection, or in a weaker metric, but that is a
+different statement.

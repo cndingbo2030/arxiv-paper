@@ -1,0 +1,30 @@
+\begin{abstract}
+Let $\HH$ be a separable Hilbert space and let a prior be the terminal
+law of an Ornstein--Uhlenbeck process perturbed by a learned,
+Cameron--Martin-valued drift.  This construction is useful for networks
+trained with score-matching objectives, but the drift in the defining
+SDE is not assumed to be the reverse-time score of its own marginals.
+Keeping that distinction explicit, we establish three measure-theoretic
+facts for bounded linear observations with Gaussian noise.  First, any
+such prior with a finite second moment gives a posterior that exists and
+is locally Lipschitz in the data in Hellinger distance; a finite-horizon
+Girsanov condition makes the terminal law equivalent to the reference
+Gaussian.  Second, for a full-space lifted spectral
+approximation, the posterior error satisfies
+\[
+  \dH(\muyN,\muy)
+  \leq C_R\!\left(\sqrt{\varepsilon_N}+r_N\right),
+  \qquad
+  r_N^2=\sum_{j>N}\lambda_j ,
+\]
+where $\varepsilon_N$ is the pathwise Cameron--Martin drift error and
+$(\lambda_j)$ are the reference-covariance eigenvalues.  The lift is
+essential: a measure supported on a finite-dimensional subspace is
+singular with respect to a nondegenerate infinite-dimensional prior.
+Third, we state a conditional posterior-contraction criterion that
+separates local prior mass from testing and identifiability.  It does
+not imply a universal contraction exponent.  In particular, finite
+dimensional observations identify an infinite-dimensional truth only
+under an additional restriction on the prior support or an inverse
+stability condition.
+\end{abstract}

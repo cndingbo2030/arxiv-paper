@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as follows."
+title: "Posterior Stability and Lifted Discretization for Bayesian Inverse Problems with Learned Ornstein--Uhlenbeck Drift Priors"
+authors:
+  - family-names: Ding
+    given-names: Bo
+date-released: 2026-07-29
+version: "2.0.0"
+repository-code: "https://github.com/cndingbo2030/arxiv-paper"
+license: MIT
+type: software
+preferred-citation:
+  type: article
+  title: "Posterior Stability and Lifted Discretization for Bayesian Inverse Problems with Learned Ornstein--Uhlenbeck Drift Priors"
+  authors:
+    - family-names: Ding
+      given-names: Bo
+  journal: "SSRN"
+  year: 2026
+  url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7040660"

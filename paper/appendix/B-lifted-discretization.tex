@@ -1,0 +1,178 @@
+\section{Proof of the lifted discretization theorem}
+\label{sec:appendix-discretization}
+
+We first record two elementary stability estimates for Bayesian
+reweighting.
+
+\begin{lemma}[Changing the base measure]
+\label{lem:bayes-base-stability}
+Let $\mu$ and $\nu$ be probability measures, let
+$0\leq\ell\leq1$, and suppose
+$\int\ell\,\mathrm d\mu\geq z$ and
+$\int\ell\,\mathrm d\nu\geq z$ for some $z>0$.  Define
+\[
+  \mu^\ell=\frac{\ell\mu}{\int\ell\,\mathrm d\mu},
+  \qquad
+  \nu^\ell=\frac{\ell\nu}{\int\ell\,\mathrm d\nu}.
+\]
+There is a finite constant $C_z$, depending only on $z$, such that
+\begin{equation}
+  \dH(\mu^\ell,\nu^\ell)\leq C_z\dH(\mu,\nu).
+  \label{eq:bayes-base-stability}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Take a common dominating measure and denote the two densities by
+$p,q$.  Cauchy--Schwarz gives
+\[
+  \int\abs{p-q}
+  \leq
+  \left(\int(\sqrt p-\sqrt q)^2\right)^{1/2}
+  \left(\int(\sqrt p+\sqrt q)^2\right)^{1/2}
+  \leq2\sqrt2\,\dH(\mu,\nu).
+\]
+Thus the two normalizing constants differ by at most the same
+quantity.  Splitting the difference of the normalized square-root
+densities into a density term and a normalizer term, and using that
+$x\mapsto x^{-1/2}$ is Lipschitz on $[z,1]$, proves
+\eqref{eq:bayes-base-stability}.
+\end{proof}
+
+\begin{lemma}[Changing the potential]
+\label{lem:bayes-potential-stability}
+Let $\nu$ be a probability measure and let $\Phi,\Psi\geq0$ satisfy
+\[
+  \int e^{-\Phi}\,\mathrm d\nu\geq z,\qquad
+  \int e^{-\Psi}\,\mathrm d\nu\geq z
+\]
+for some $z>0$.  If $\Phi-\Psi\in L^2(\nu)$, then
+\begin{equation}
+  \dH\!\left(
+    \frac{e^{-\Phi}\nu}{\int e^{-\Phi}\,\mathrm d\nu},
+    \frac{e^{-\Psi}\nu}{\int e^{-\Psi}\,\mathrm d\nu}
+  \right)
+  \leq C_z\norm{\Phi-\Psi}_{L^2(\nu)} .
+  \label{eq:bayes-potential-stability}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Use
+$\abs{e^{-x}-e^{-x'}}\leq\abs{x-x'}$ and
+$\abs{e^{-x/2}-e^{-x'/2}}\leq\tfrac12\abs{x-x'}$ for
+$x,x'\geq0$.  The normalizing constants are controlled in
+$L^1(\nu)$, and the square-root likelihoods are controlled in
+$L^2(\nu)$.  The same normalizer split as in
+\Cref{lem:bayes-base-stability} gives the result.
+\end{proof}
+
+\begin{lemma}[Prior approximation]
+\label{lem:prior-approximation}
+Under \Cref{ass:drift-approximation},
+\begin{equation}
+  \dH(\muz,\mu_{0,N})\leq\frac12\sqrt{\varepsilon_N}.
+  \label{eq:prior-approximation}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The terminal-value map from path space to $\HH$ is measurable.  The
+data-processing inequality and \eqref{eq:drift-energy} give
+\[
+  \KL(\muz\,\|\,\mu_{0,N})
+  \leq
+  \KL(\mathbb Q^\theta\,\|\,\mathbb Q_N^\theta)
+  =\frac12\varepsilon_N.
+\]
+With the convention \eqref{eq:hellinger},
+$2\dH^2(\mu,\nu)\leq\KL(\mu\,\|\,\nu)$.  This proves
+\eqref{eq:prior-approximation}.
+\end{proof}
+
+\begin{lemma}[Likelihood projection error]
+\label{lem:likelihood-projection}
+For every $R<\infty$ there is a constant $C_R$, independent of $N$,
+such that
+\begin{equation}
+  \sup_{\norm y\leq R}
+  \norm{
+    \Phim_{\sigobs}(\,\cdot\,;y)
+    -\Phim_{\sigobs,N}(\,\cdot\,;y)
+  }_{L^2(\mu_{0,N})}
+  \leq C_R r_N.
+  \label{eq:likelihood-projection-error}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write $U_T^N=L_N+H_N$, where
+$L_N=P_NU_T^N$ and $H_N=(I-P_N)U_T^N$.  Since the drift in
+\eqref{eq:lifted-prior-sde} depends only on $P_NU_t^N$ and takes
+values in $\HN$, the high component is a stationary OU process
+independent of the low component.  Hence
+\[
+  H_N\sim\mathcal N(0,(I-P_N)\mathcal C),\qquad
+  \mathbb E\norm{H_N}^2=r_N^2,\qquad
+  \mathbb E\norm{H_N}^4\leq3r_N^4.
+\]
+By \Cref{lem:sde-moments},
+$\sup_N\mathbb E\norm{L_N}^4<\infty$.
+
+For $u=l+h$, with $l=P_Nu$ and $h=(I-P_N)u$, expansion of the two
+quadratic potentials gives, uniformly for $\norm y\leq R$,
+\begin{equation}
+  \abs{
+    \Phim_{\sigobs}(u;y)-\Phim_{\sigobs}(l;y)
+  }
+  \leq C_R\norm h(1+\norm l+\norm h).
+  \label{eq:potential-projection-pointwise}
+\end{equation}
+Square this inequality and use the independence of $L_N,H_N$, the
+uniform fourth-moment bound, and the Gaussian estimates above.  Since
+$r_N\leq(\operatorname{Tr}\mathcal C)^{1/2}$,
+\[
+  \mathbb E
+  \left[
+    \norm{H_N}^2(1+\norm{L_N}+\norm{H_N})^2
+  \right]
+  \leq C r_N^2.
+\]
+Taking square roots proves
+\eqref{eq:likelihood-projection-error}.
+\end{proof}
+
+\begin{proof}[Proof of \Cref{thm:discrete}]
+The moment bounds in \Cref{lem:sde-moments} are uniform in $N$.
+Markov's inequality therefore gives a ball $B(0,r)$ that has mass at
+least $1/2$ under every $\mu_{0,N}$ and positive mass under $\muz$.
+On that ball, both $\Phim_{\sigobs}$ and
+$\Phim_{\sigobs,N}$ are bounded uniformly for $\norm y\leq R$.
+All normalizing constants used below consequently have a common
+positive lower bound $z_R$.
+
+Introduce the intermediate posterior
+\[
+  \frac{\mathrm d\bar\mu_N^y}{\mathrm d\mu_{0,N}}(u)
+  =
+  \frac{e^{-\Phim_{\sigobs}(u;y)}}
+       {\int e^{-\Phim_{\sigobs}(v;y)}\,\mu_{0,N}(\mathrm dv)}.
+\]
+By the triangle inequality,
+\[
+  \dH(\muy,\muyN)
+  \leq\dH(\muy,\bar\mu_N^y)
+      +\dH(\bar\mu_N^y,\muyN).
+\]
+\Cref{lem:bayes-base-stability,lem:prior-approximation} give
+\[
+  \dH(\muy,\bar\mu_N^y)
+  \leq C_R\sqrt{\varepsilon_N}.
+\]
+\Cref{lem:bayes-potential-stability,lem:likelihood-projection} give
+\[
+  \dH(\bar\mu_N^y,\muyN)\leq C_R r_N.
+\]
+Combining the estimates proves
+\eqref{eq:discretization-bound}.
+\end{proof}

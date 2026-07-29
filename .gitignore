@@ -1,0 +1,66 @@
+# ---------- LaTeX ----------
+paper/build/
+paper/build_preview.pdf
+paper/figures/*.pdf
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.bcf
+*.run.xml
+*.nav
+*.snm
+*.vrb
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.tox/
+.venv/
+venv/
+env/
+
+# ---------- Experiments ----------
+experiments/results/
+experiments/checkpoints/
+experiments/wandb/
+experiments/lightning_logs/
+*.ckpt
+*.pt
+*.pth
+*.npz
+*.npy
+
+# ---------- Jupyter ----------
+.ipynb_checkpoints/
+
+# ---------- macOS ----------
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ---------- IDE ----------
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---------- Misc ----------
+arxiv_submission.tar.gz

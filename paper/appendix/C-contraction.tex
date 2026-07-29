@@ -1,0 +1,62 @@
+\section{Proof of the contraction criterion}
+\label{sec:appendix-contraction}
+
+\begin{proof}[Proof of \Cref{thm:contraction}]
+Let
+\[
+  L_n(u)
+  =\frac{\mathrm dP_u^{(n)}}{\mathrm dP_{\udag}^{(n)}}
+      (Y^{(n)}),
+  \qquad
+  D_n=\int L_n(u)\,\muz(\mathrm du)
+\]
+be the likelihood ratio and the posterior denominator.  The usual
+Bayesian denominator lemma, applied to
+\eqref{eq:kl-neighborhood}--\eqref{eq:contraction-mass}, gives
+\begin{equation}
+  P_{\udag}^{(n)}
+  \left(
+    D_n<e^{-(c+2)n\epsilon_n^2}
+  \right)\longrightarrow0 .
+  \label{eq:denominator-event}
+\end{equation}
+The lemma follows by integrating the log-likelihood ratios over
+$\mathcal K_n$ and applying Chebyshev's inequality to the variance
+bound; it is the standard denominator step in posterior-contraction
+proofs \citep[Chapter~8]{ghosal2017}.
+
+Set
+\[
+  A_n
+  =\{u\in\mathcal F_n:d_n(u,\udag)>M\epsilon_n\}.
+\]
+Fubini's theorem and change of measure give
+\begin{align*}
+  \mathbb E_{\udag}^{(n)}
+  \left[
+    (1-\varphi_n)\int_{A_n}L_n(u)\,\muz(\mathrm du)
+  \right]
+  &=
+  \int_{A_n}P_u^{(n)}(1-\varphi_n)\,\muz(\mathrm du)\\
+  &\leq e^{-(c+4)n\epsilon_n^2}.
+\end{align*}
+On the event in which the lower bound complementary to
+\eqref{eq:denominator-event} holds, Markov's inequality therefore
+shows that the posterior mass of $A_n$, apart from the type-I test
+term, converges to zero.  Indeed, the ratio of the displayed
+expectation to the denominator lower bound is at most
+$e^{-2n\epsilon_n^2}$.
+
+For the complement of the sieve, Fubini gives
+\[
+  \mathbb E_{\udag}^{(n)}
+  \int_{\mathcal F_n^c}L_n(u)\,\muz(\mathrm du)
+  =\muz(\mathcal F_n^c)
+  \leq e^{-(c+4)n\epsilon_n^2},
+\]
+and the same denominator argument applies.  Finally,
+$P_{\udag}^{(n)}\varphi_n\to0$ by
+\eqref{eq:contraction-type1}.  Combining the test term, the two
+numerator bounds, and \eqref{eq:denominator-event} proves
+\eqref{eq:contraction-conclusion}.
+\end{proof}

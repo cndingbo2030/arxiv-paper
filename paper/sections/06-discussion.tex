@@ -1,0 +1,31 @@
+\section{Discussion}
+\label{sec:discussion}
+
+The analysis isolates three levels that should not be conflated.
+First, \Cref{ass:drift} makes the stochastic prior well defined.
+Second, \Cref{ass:girsanov} gives a finite-horizon change of measure and
+a terminal density.  Third, posterior contraction requires local mass,
+tests, and identifiability for a specified sequence of experiments.
+Passing one level does not automatically establish the next.
+
+The lifted approximation in \Cref{thm:discrete} resolves a specific
+measure-theoretic obstruction.  It is suited to Hellinger comparison
+because both posteriors remain measures on $\HH$.  A practical solver
+may store only the first $N$ coordinates; its output should then be
+compared after projection or in a topology compatible with that
+finite-dimensional representation.  Hellinger convergence to the full
+posterior cannot hold for the zero-padded law.
+
+Several questions remain open.  A score-matching theorem would be
+needed to relate a particular training objective to the learned drift
+and to $\varepsilon_N$.  An unconditional contraction theorem would
+need lower control of the terminal Girsanov density near the truth,
+together with model-specific tests and sieves.  Nonlinear forward maps
+would require separate likelihood bounds and inverse stability
+assumptions.  Finally, sampler accuracy is distinct from posterior
+approximation and must include time discretization and mixing errors.
+
+The conclusions here are consequently modest but checkable: a stable
+posterior for a well-defined learned OU drift prior, a quantitative
+full-space discretization bound, and an explicit account of the
+additional assumptions needed for statistical recovery.

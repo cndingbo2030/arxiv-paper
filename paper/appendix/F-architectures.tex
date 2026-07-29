@@ -1,0 +1,75 @@
+\section{A verifiable drift parameterization}
+\label{sec:appendix-architectures}
+
+The Cameron--Martin range condition is strong in infinite dimensions.
+It can nevertheless be imposed directly, without making claims about
+a particular neural-network family.
+
+\begin{proposition}[Covariance-factorized drift]
+\label{prop:factorized-drift}
+Let
+$\widetilde b_\theta:[0,T]\times\HH\to\HH$ be jointly measurable and
+suppose that, uniformly in $t$,
+\begin{align}
+  \norm{\widetilde b_\theta(t,u)
+        -\widetilde b_\theta(t,v)}_{\HH}
+    &\leq L\norm{u-v}_{\HH},\\
+  \norm{\widetilde b_\theta(t,u)}_{\HH}
+    &\leq M(1+\norm u_{\HH}).
+\end{align}
+Define
+\begin{equation}
+  \drift(t,u)=\mathcal C^{1/2}\widetilde b_\theta(t,u).
+  \label{eq:factorized-drift}
+\end{equation}
+Then $\drift$ satisfies \Cref{ass:drift} with the same constants.
+Moreover, the projected drift \eqref{eq:projected-drift} satisfies
+\begin{equation}
+  a_N(t,u)
+  =P_N\widetilde b_\theta(t,P_Nu),
+  \label{eq:factorized-projected-drift}
+\end{equation}
+and the approximation quantity in \eqref{eq:drift-energy} is
+\begin{equation}
+  \varepsilon_N
+  =
+  \mathbb E_{\mathbb Q^\theta}
+  \int_0^T
+  \norm{
+    \widetilde b_\theta(t,X_t)
+    -P_N\widetilde b_\theta(t,P_NX_t)
+  }_{\HH}^2\,\mathrm dt .
+  \label{eq:factorized-energy}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Since $\mathcal C$ is injective,
+\[
+  \norm{\mathcal C^{1/2}h}_{H_{\mathcal C}}
+  =\norm h_{\HH}.
+\]
+Applying this identity to \eqref{eq:factorized-drift} proves the
+Cameron--Martin Lipschitz and growth bounds.  Because $P_N$ is a
+spectral projection of $\mathcal C$, it commutes with
+$\mathcal C^{1/2}$.  Therefore
+\[
+  \driftN(t,u)
+  =\mathcal C^{1/2}P_N
+     \widetilde b_\theta(t,P_Nu),
+\]
+which gives \eqref{eq:factorized-projected-drift}.  Substitution into
+\eqref{eq:drift-energy} gives \eqref{eq:factorized-energy}.
+\end{proof}
+
+\begin{remark}
+Equation \eqref{eq:factorized-drift} is an architectural interface,
+not a claim that an arbitrary pretrained score network satisfies
+\Cref{ass:drift}.  A finite-dimensional network can be placed before
+the fixed smoothing map $\mathcal C^{1/2}$, but a discretization study
+must then verify uniform Lipschitz and growth bounds as $N$ changes.
+Spectral normalization is one possible way to control finite-layer
+operator norms \citep{miyato2018spectral}; it does not by itself prove
+the Girsanov martingale condition or the local density bound in
+\Cref{cor:local-mass-transfer}.
+\end{remark}

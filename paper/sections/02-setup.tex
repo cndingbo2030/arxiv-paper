@@ -1,0 +1,178 @@
+\section{Mathematical setup}
+\label{sec:setup}
+
+\subsection{Reference process and learned drift}
+
+Let $\HH$ be a separable real Hilbert space.  Let
+$\mathcal C:\HH\to\HH$ be positive, self-adjoint, injective, and
+trace-class.  Write
+\[
+  \mathcal C\phi_j=\lambda_j\phi_j,\qquad
+  \lambda_1\geq\lambda_2\geq\cdots>0,
+  \qquad \sum_{j\geq1}\lambda_j<\infty ,
+\]
+for an orthonormal eigenbasis, and let
+$\mu_{\mathrm{ref}}=\mathcal N(0,\mathcal C)$.  Its
+Cameron--Martin space is
+\[
+  H_{\mathcal C}=\operatorname{Ran}(\mathcal C^{1/2}),\qquad
+  \norm{h}_{H_{\mathcal C}}
+  =\norm{\mathcal C^{-1/2}h}_{\HH}.
+\]
+The inverse in this expression is the inverse on
+$\operatorname{Ran}(\mathcal C^{1/2})$.
+
+On a filtered probability space
+$(\Omega,\mathcal F,(\mathcal F_t)_{t\leq T},\mathbb Q)$, let $W$ be a
+cylindrical Wiener process on $\HH$.  The stationary reference process
+solves
+\begin{equation}
+  \mathrm dX_t=-\tfrac12 X_t\,\mathrm dt
+      +\mathcal C^{1/2}\,\mathrm dW_t,
+  \qquad X_0\sim\mu_{\mathrm{ref}},
+  \label{eq:reference-ou}
+\end{equation}
+with $X_0$ independent of $W$.  Thus
+$\mathcal L_{\mathbb Q}(X_t)=\mu_{\mathrm{ref}}$ for every $t$.
+
+\begin{assumption}[Cameron--Martin drift]
+\label{ass:drift}
+The map $\drift:[0,T]\times\HH\to H_{\mathcal C}$ is jointly
+measurable.  There are constants $L,M<\infty$ such that, for every
+$t\in[0,T]$ and $u,v\in\HH$,
+\begin{align}
+  \norm{\drift(t,u)-\drift(t,v)}_{H_{\mathcal C}}
+    &\leq L\norm{u-v}_{\HH}, \label{eq:drift-lipschitz}\\
+  \norm{\drift(t,u)}_{H_{\mathcal C}}
+    &\leq M(1+\norm{u}_{\HH}). \label{eq:drift-growth}
+\end{align}
+\end{assumption}
+
+The perturbed process is
+\begin{equation}
+  \mathrm dU_t
+  =\bigl[-\tfrac12 U_t+\drift(t,U_t)\bigr]\,\mathrm dt
+   +\mathcal C^{1/2}\,\mathrm dW_t,
+  \qquad U_0\sim\mu_{\mathrm{ref}},
+  \label{eq:prior-sde}
+\end{equation}
+and the prior is its terminal law
+\begin{equation}
+  \muz=\mathcal L(U_T).
+  \label{eq:prior-terminal-law}
+\end{equation}
+\Cref{ass:drift} implies existence, pathwise uniqueness, and finite
+moments of every fixed order used below; see
+\Cref{lem:sde-moments}.
+
+Set
+\[
+  a(t,u)=\mathcal C^{-1/2}\drift(t,u).
+\]
+The following condition is deliberately stated on the reference path.
+
+\begin{assumption}[Finite-horizon change of measure]
+\label{ass:girsanov}
+The stochastic exponential
+\begin{equation}
+  \mathcal E_T
+  =
+  \exp\!\left\{
+    \int_0^T\inner{a(t,X_t)}{\mathrm dW_t}_{\HH}
+    -\frac12\int_0^T\norm{a(t,X_t)}_{\HH}^2\,\mathrm dt
+  \right\}
+  \label{eq:girsanov-exponential}
+\end{equation}
+is a true martingale and
+$\mathbb E_{\mathbb Q}\mathcal E_T^2<\infty$.
+\end{assumption}
+
+Under this assumption, the law of $X$ after the change of measure
+$\mathrm d\mathbb Q^\theta=\mathcal E_T\,\mathrm d\mathbb Q$ is the
+law of \eqref{eq:prior-sde}.  In particular,
+\begin{equation}
+  \muz\sim\mu_{\mathrm{ref}},\qquad
+  \rho(x):=\frac{\mathrm d\muz}{\mathrm d\mu_{\mathrm{ref}}}(x)
+  =\mathbb E_{\mathbb Q}
+      [\mathcal E_T\mid X_T=x],
+  \label{eq:terminal-density}
+\end{equation}
+for a suitable version of the conditional expectation, and
+$\rho\in L^2(\mu_{\mathrm{ref}})$; see
+\Cref{lem:girsanov-terminal}.
+Bounded $a$ is a simple sufficient condition for the martingale part of
+\Cref{ass:girsanov}.  Affine growth alone is not a substitute for
+Novikov's or another valid martingale criterion, so the condition is
+kept explicit.
+
+\begin{remark}[Relation to a reverse-time score]
+\label{rem:not-reverse-score}
+Equation \eqref{eq:prior-sde} defines a learned-drift prior.  It is not,
+by itself, the reverse-time SDE associated with
+\eqref{eq:reference-ou}.  In the reverse-time formulation, the time
+orientation and drift contain the score of the relevant noised
+marginal, characterized through conditional expectations
+\citep{pidstrigach2023}.  A network trained by denoising score matching
+may be used to parameterize $\drift$, but identifying the trained
+network with that reverse-time score requires a separate approximation
+theorem.  No such identification is used here.
+\end{remark}
+
+\subsection{Observation model and posterior}
+
+Let $\G:\HH\to\R^k$ be bounded and linear, let
+$\Gamobs\in\R^{k\times k}$ be positive definite, and fix
+$\sigobs>0$.  The data satisfy
+\begin{equation}
+  y=\G\udag+\sigobs\noise,\qquad
+  \noise\sim\mathcal N(0,\Gamobs).
+  \label{eq:forward}
+\end{equation}
+The negative log-likelihood, up to an additive constant independent of
+$u$, is
+\begin{equation}
+  \Phim_{\sigobs}(u;y)
+  =\frac{1}{2\sigobs^2}
+    \norm{\Gamobs^{-1/2}(y-\G u)}_{\R^k}^2 .
+  \label{eq:potential}
+\end{equation}
+Bayes' formula defines
+\begin{equation}
+  \frac{\mathrm d\muy}{\mathrm d\muz}(u)
+  =\frac{1}{Z(y)}
+     \exp\{-\Phim_{\sigobs}(u;y)\},\qquad
+  Z(y)=\int_{\HH}\exp\{-\Phim_{\sigobs}(u;y)\}\,\muz(\mathrm du).
+  \label{eq:posterior}
+\end{equation}
+The noise factor $\sigobs^{-2}$ in \eqref{eq:potential} is retained
+throughout; it is essential when studying small-noise limits.
+
+For probability measures $\mu,\nu$ dominated by $\xi$, we use
+\begin{equation}
+  \dH^2(\mu,\nu)
+  =\frac12\int
+    \left(
+      \sqrt{\frac{\mathrm d\mu}{\mathrm d\xi}}
+      -\sqrt{\frac{\mathrm d\nu}{\mathrm d\xi}}
+    \right)^2\,\mathrm d\xi .
+  \label{eq:hellinger}
+\end{equation}
+The value does not depend on the choice of $\xi$.
+
+\subsection{Spectral projections}
+
+Let
+\[
+  P_Nu=\sum_{j=1}^N\inner{u}{\phi_j}\phi_j,\qquad
+  \HN=P_N\HH,
+\]
+and define the covariance-tail scale
+\begin{equation}
+  r_N^2
+  =\operatorname{Tr}\bigl((I-P_N)\mathcal C\bigr)
+  =\sum_{j>N}\lambda_j .
+  \label{eq:tail-scale}
+\end{equation}
+Because $\mathcal C$ is trace-class, $r_N\to0$.  The approximating
+prior used below remains a measure on all of $\HH$; it does not replace
+the unresolved coordinates by zero.

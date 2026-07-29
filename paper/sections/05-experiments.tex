@@ -1,0 +1,24 @@
+\section{Computational scope}
+\label{sec:experiments}
+
+The repository accompanying this manuscript contains a one-dimensional
+Gaussian-process example, a denoising-score-matching implementation,
+a preconditioned Langevin sampler, and numerical routines for Gaussian
+Hellinger distances.  These components are retained as reproducible
+exploratory code.  They are not used in any proof.
+
+In particular, a finite-batch denoising loss is not an estimator of the
+path expectation $\varepsilon_N$ in \eqref{eq:drift-energy} without an
+additional calibration argument.  Likewise, a log--log fit over a
+small set of noise levels does not establish a posterior-contraction
+exponent.  The scripts and the pilot arrays they generate should
+therefore be read as implementation checks, not as empirical
+verification of \Cref{thm:discrete} or \Cref{thm:contraction}.
+
+A numerical study designed to test \Cref{thm:discrete} would need, at a
+minimum, a drift architecture satisfying \Cref{ass:drift}, a direct
+estimate of the Cameron--Martin energy in
+\eqref{eq:drift-energy}, controlled covariance-tail truncations, and
+sampling error bars.  A contraction study would additionally need an
+identifiable sequence of experiments and a pre-specified loss.  Those
+experiments are beyond the claims of the present paper.

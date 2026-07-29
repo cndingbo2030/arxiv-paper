@@ -1,0 +1,165 @@
+\section{Conditional contraction and identifiability}
+\label{sec:contraction}
+
+Well-posedness for a fixed $\sigobs$ does not determine what happens
+as information increases.  A contraction rate is a property of a
+sequence of statistical experiments, not of the prior alone.  This
+section records a standard criterion in a form that makes the missing
+inputs explicit.
+
+\subsection{A test-and-prior-mass criterion}
+
+For each $n$, let
+$\{P_u^{(n)}:u\in\HH\}$ be a dominated experiment, let
+$Y^{(n)}\sim P_{\udag}^{(n)}$, and let $\Pi_n(\,\cdot\mid Y^{(n)})$
+be the posterior obtained from the fixed prior $\muz$.  Let $d_n$ be
+a semimetric.  Whenever the relevant Radon--Nikodym derivatives exist,
+write
+\begin{align}
+  K_n(u)
+    &=\KL\!\left(P_{\udag}^{(n)}\,\|\,P_u^{(n)}\right),\\
+  V_n(u)
+    &=\operatorname{Var}_{P_{\udag}^{(n)}}\!
+      \left[
+        \log\frac{\mathrm dP_{\udag}^{(n)}}{\mathrm dP_u^{(n)}}
+      \right].
+\end{align}
+
+\begin{theorem}[Conditional contraction criterion]
+\label{thm:contraction}
+Let $\epsilon_n\downarrow0$ with $n\epsilon_n^2\to\infty$.  Suppose
+there are a constant $c>0$, measurable sieves
+$\mathcal F_n\subset\HH$, measurable sets
+\begin{equation}
+  \mathcal K_n
+  \subset
+  \{u:K_n(u)\leq n\epsilon_n^2,\;
+       V_n(u)\leq n\epsilon_n^2\},
+  \label{eq:kl-neighborhood}
+\end{equation}
+tests $\varphi_n$, and a constant $M<\infty$ such that
+\begin{align}
+  \muz(\mathcal K_n)
+    &\geq e^{-c n\epsilon_n^2}, \label{eq:contraction-mass}\\
+  \muz(\mathcal F_n^c)
+    &\leq e^{-(c+4)n\epsilon_n^2}, \label{eq:contraction-sieve}\\
+  P_{\udag}^{(n)}\varphi_n
+    &\longrightarrow0, \label{eq:contraction-type1}\\
+  \sup_{\substack{u\in\mathcal F_n\\
+                   d_n(u,\udag)>M\epsilon_n}}
+  P_u^{(n)}(1-\varphi_n)
+    &\leq e^{-(c+4)n\epsilon_n^2}. \label{eq:contraction-type2}
+\end{align}
+Then
+\begin{equation}
+  \Pi_n\!\left(
+    u:d_n(u,\udag)>M\epsilon_n
+    \,\middle|\,Y^{(n)}
+  \right)
+  \longrightarrow0
+  \quad\text{in }P_{\udag}^{(n)}\text{-probability}.
+  \label{eq:contraction-conclusion}
+\end{equation}
+\end{theorem}
+
+This theorem is a direct test-and-denominator argument; see
+\Cref{sec:appendix-contraction}.  Entropy conditions often appear in
+applications because they are a way to construct
+\eqref{eq:contraction-type1}--\eqref{eq:contraction-type2}.  They are
+not consequences of the drift assumptions.
+
+\subsection{What Girsanov does and does not transfer}
+
+Suppose \Cref{ass:girsanov} holds, so that
+$\muz=\rho\,\mu_{\mathrm{ref}}$.
+
+\begin{corollary}[Local mass transfer]
+\label{cor:local-mass-transfer}
+In the setting of \Cref{thm:contraction}, suppose
+\begin{align}
+  \mu_{\mathrm{ref}}(\mathcal K_n)
+    &\geq e^{-c_0n\epsilon_n^2},\\
+  \operatorname*{ess\,inf}_{u\in\mathcal K_n}
+    \rho(u)
+    &\geq e^{-a n\epsilon_n^2}
+\end{align}
+for constants $c_0,a\geq0$.  Then
+\begin{equation}
+  \muz(\mathcal K_n)
+  \geq e^{-(c_0+a)n\epsilon_n^2}.
+  \label{eq:mass-transfer}
+\end{equation}
+If, in addition, the sieve and testing conditions of
+\Cref{thm:contraction} hold with $c=c_0+a$, then
+\eqref{eq:contraction-conclusion} follows.
+\end{corollary}
+
+\begin{proof}
+Integrating the local lower bound gives
+\[
+  \muz(\mathcal K_n)
+  =\int_{\mathcal K_n}\rho\,\mathrm d\mu_{\mathrm{ref}}
+  \geq e^{-a n\epsilon_n^2}
+       \mu_{\mathrm{ref}}(\mathcal K_n),
+\]
+which is \eqref{eq:mass-transfer}.  Apply
+\Cref{thm:contraction}.
+\end{proof}
+
+The hypothesis on the essential infimum is genuinely local.
+The global estimate $\rho\in L^2(\mu_{\mathrm{ref}})$ from
+\eqref{eq:terminal-density} gives an upper-integrability bound; it
+does not prevent $\rho$ from becoming arbitrarily small on the
+shrinking sets $\mathcal K_n$.  It therefore cannot be used by itself
+to claim that a Gaussian contraction rate transfers to the learned
+prior.
+
+Even for Gaussian priors, there is no model-independent exponent.  In
+the sequence model analysed by \citet{knapik2011}, the rate depends on
+the regularity of the prior, the regularity of the truth, the
+ill-posedness of the forward operator, and any $n$-dependent prior
+scale.  A rate for \eqref{eq:prior-sde} can only be stated after those
+quantities and the local density bound in
+\Cref{cor:local-mass-transfer} have been established.
+
+\subsection{The identifiable object}
+
+For the observation model \eqref{eq:forward}, define
+\[
+  d_{\G}(u,v)
+  =\norm{\Gamobs^{-1/2}\G(u-v)}_{\R^k}.
+\]
+This is generally a semimetric, not a norm.
+
+\begin{proposition}[Observational equivalence]
+\label{thm:ident}
+For any $u,v\in\HH$ and any $\sigobs>0$, the data distributions in
+\eqref{eq:forward} are equal if and only if
+\begin{equation}
+  \G u=\G v.
+  \label{eq:observational-equivalence}
+\end{equation}
+If $S=\operatorname{supp}\muz$, the parameter is identifiable on $S$
+if and only if $\G|_S$ is injective, equivalently
+\begin{equation}
+  (S-S)\cap\ker\G=\{0\}.
+  \label{eq:support-identifiability}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The two Gaussian distributions have the same positive-definite
+covariance $\sigobs^2\Gamobs$, so they are equal exactly when their
+means agree.  The second statement is the definition of injectivity
+restricted to $S$.
+\end{proof}
+
+Under \Cref{ass:girsanov}, $\muz\sim\mu_{\mathrm{ref}}$ and hence
+$S=\HH$.  If $\HH$ is infinite-dimensional and $k<\infty$, then
+$\ker\G\neq\{0\}$.  Full $\HH$-norm recovery is therefore impossible
+from this observation model without further structure.
+One may instead prove contraction in $d_{\G}$, restrict the support to
+a class on which $\G$ is injective, or assume a quantitative inverse
+stability estimate linking $\norm{u-v}_{\HH}$ to $d_{\G}(u,v)$ on the
+relevant sieve.  None of these properties follows from
+\Cref{ass:drift}.

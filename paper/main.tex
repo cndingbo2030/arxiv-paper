@@ -1,0 +1,42 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+
+\input{macros}
+
+\title{Posterior Stability and Lifted Discretization for\\
+       Bayesian Inverse Problems with Learned
+       Ornstein--Uhlenbeck Drift Priors}
+
+\author{Bo Ding}
+
+\date{\today}
+
+\hypersetup{
+  pdftitle={Posterior Stability and Lifted Discretization for Bayesian Inverse Problems with Learned Ornstein--Uhlenbeck Drift Priors},
+  pdfauthor={Bo Ding},
+  pdfsubject={Bayesian inverse problems with learned Ornstein--Uhlenbeck drift priors},
+  pdfkeywords={Bayesian inverse problems, learned priors, Ornstein--Uhlenbeck processes, Girsanov theorem, posterior stability, lifted discretization}
+}
+
+\begin{document}
+\maketitle
+
+\input{sections/00-abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-setup}
+\input{sections/03-wellposedness}
+\input{sections/04-contraction}
+\input{sections/05-experiments}
+\input{sections/06-discussion}
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\appendix
+\input{appendix/A-prior-and-stability}
+\input{appendix/B-lifted-discretization}
+\input{appendix/C-contraction}
+\input{appendix/F-architectures}
+
+\end{document}
